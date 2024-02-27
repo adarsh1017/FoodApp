@@ -1,0 +1,55 @@
+import {Fragment} from 'react';
+import ReactDOM from 'react-dom';
+import classes from './Modal.module.css';
+
+const Backdrop = (props) => {
+return <div className ={classes.backdrop} />;
+};
+
+const ModalOverlay  = props => {
+return (
+<div className={classes.modal}>
+<div className={classes.content}>{props.children}</div>
+</div>
+);
+};
+
+const portalElement= document.getElementById('overlays');
+const Modal = (props) =>{
+return <Fragment>
+{ReactDOM.createPortal(<Backdrop/>, portalElement)}
+{ReactDOM.createPortal(<ModalOverlay>{props.children}</ModalOverlay>,portalElement)}
+</Fragment>
+};
+
+export default Modal;
+
+
+import Modal from '../UI/Modal';
+import classes from './Cart.module.css';
+
+const Cart = (props) => {
+  const cartItems = (
+    <ul className={classes['cart-items']}>
+      {[{ id: 'c1', name: 'Pav Bhaji', amount: 2, price: 50.00 }].map((item) => (
+        <li key={item.id}>{item.name}</li>
+      ))}
+    </ul>
+  );
+
+  return (
+    <Modal>
+      {cartItems}
+      <div className={classes.total}>
+        <span>Total Amount</span>
+        <span>70.00</span>
+      </div>
+      <div className={classes.actions}>
+        <button className={classes['button--alt']}>Close</button>
+        <button className={classes.button}>Order</button>
+      </div>
+    </Modal>
+  );
+};
+
+export default Cart;
